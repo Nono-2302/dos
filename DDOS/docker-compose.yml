@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  noeud_test:
+    build: .
+    # Les arguments par défaut (modifiés dynamiquement par le menu.bat)
+    command: python attack.py example.com 1
+    networks:
+      - reseau_labo
+    restart: unless-stopped
+
+networks:
+  reseau_labo:
+    driver: bridge

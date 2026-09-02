@@ -1,0 +1,66 @@
+===================================================================
+      GUIDE DE LABORATOIRE - SIMULATION DISTRIBUÉE VIA DOCKER
+===================================================================
+
+Ce guide détaille la mise en place d'un environnement de test de charge
+distribué local. Au lieu d'ouvrir de simples fenêtres Windows, nous 
+utilisons des conteneurs Docker isolés pour simuler plusieurs machines 
+virtuelles indépendantes travaillant en parallèle sur un réseau virtuel.
+
+-------------------------------------------------------------------
+ETAPE 1 : PRÉREQUIS - INSTALLER DOCKER DESKTOP
+-------------------------------------------------------------------
+Pour faire tourner les conteneurs sur votre Windows, vous devez installer 
+le moteur Docker officiel :
+
+1. Allez sur le site officiel : https://docker.com
+2. Téléchargez "Docker Desktop for Windows" et lancez l'installation.
+3. Lors de l'installation, assurez-vous que la case "Use WSL 2 instead 
+   of Hyper-V" (recommandé) est bien COCHÉE.
+4. Une fois l'installation terminée, redémarrez votre PC.
+5. Lancez l'application "Docker Desktop" et laissez-la tourner en arrière-plan.
+
+-------------------------------------------------------------------
+ETAPE 2 : ORGANISATION DES FICHIERS DE LABORATOIRE
+-------------------------------------------------------------------
+Créez un dossier propre (ex: "LaboDocker") et placez-y vos 4 fichiers. 
+Attention, les noms et extensions doivent être exacts :
+
+1. "Dockerfile"          -> Fichier de configuration de l'image (sans extension).
+2. "docker-compose.yml"  -> Fichier d'orchestration du réseau et des nœuds.
+3. "attack.py"           -> Le script Python adapté pour l'affichage Docker log.
+4. "tuto.txt"            -> Ce guide de référence.
+
+-------------------------------------------------------------------
+ETAPE 3 : LANCEMENT DE LA SIMULATION DISTRIBUÉE
+-------------------------------------------------------------------
+1. Ouvrez une invite de commandes Windows normale (cmd) ou un terminal.
+2. Naviguez jusqu'à votre dossier de travail :
+   cd C:\Chemin\De\Votre\Dossier\LaboDocker
+
+3. Construisez l'image système miniature des nœuds de test :
+   docker compose build
+
+4. Lancez la simulation en choisissant le NOMBRE de machines virtuelles (nœuds).
+   Par exemple, pour simuler 10 machines distinctes en arrière-plan :
+   
+   docker compose up --scale noeud_test=10 -d
+
+-------------------------------------------------------------------
+ETAPE 4 : SURVEILLANCE ET ARRÊT
+-------------------------------------------------------------------
+* Pour voir les compteurs de toutes vos machines virtuelles défiler 
+  simultanément et vérifier qu'elles travaillent de manière autonome :
+  
+  docker compose logs -f
+
+* Pour arrêter instantanément l'intégralité du laboratoire, détruire 
+  les machines simulées et nettoyer le réseau virtuel de votre PC :
+  
+  docker compose down
+
+===================================================================
+[NOTE PÉDAGOGIQUE] : Les conteneurs partagent la connexion internet de 
+votre système hôte (ou de votre VPN actif). Cette structure permet 
+d'étudier le comportement d'applications multi-sources en réseau fermé.
+===================================================================
